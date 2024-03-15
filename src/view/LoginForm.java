@@ -1,13 +1,19 @@
 package src.view;
 
+import src.model.Peer;
+
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class LoginForm extends JFrame {
     private JTextField usernameField;
+    private JTextField ipAddressField;
     private JTextField portNumberField;
+    private ArrayList<Peer> peers;
 
-    public LoginForm() {
+    public LoginForm(ArrayList<Peer> peers) {
+        this.peers = peers;
         setTitle("Login Form");
         setSize(300, 150);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -29,12 +35,20 @@ public class LoginForm extends JFrame {
         usernameField.setBounds(100, 20, 165, 25);
         panel.add(usernameField);
 
+        JLabel ipAddressLabel = new JLabel("IP Address");
+        ipAddressLabel.setBounds(10, 20, 80, 25);
+        panel.add(ipAddressLabel);
+
+        ipAddressField = new JTextField(20);
+        ipAddressField.setBounds(100, 20, 165, 25);
+        panel.add(ipAddressField);
+
         JLabel portNumberLabel = new JLabel("Port Number");
-        portNumberLabel.setBounds(10, 50, 80, 25);
+        portNumberLabel.setBounds(10, 20, 80, 25);
         panel.add(portNumberLabel);
 
         portNumberField = new JTextField(20);
-        portNumberField.setBounds(100, 50, 165, 25);
+        portNumberField.setBounds(100, 20, 165, 25);
         panel.add(portNumberField);
 
         JButton loginButton = new JButton("Login");
@@ -42,19 +56,25 @@ public class LoginForm extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String username = usernameField.getText();
+                String ipAddress = ipAddressField.getText();
                 int portNumber = Integer.parseInt(portNumberField.getText());
-                boolean loggedIn = login(username, portNumber);
-                if (loggedIn) {
+                System.out.println(username + " " + ipAddress + " " + portNumber);
+                // check if the provided credentials are valid
+                boolean isLoggedIn = false;
+                for (Peer peer : peers) {
+                    if (peer.getUsername().equals(username) && peer.getIpAddress().equals(ipAddress)
+                            && peer.getPortNumber() == portNumber) {
+                        isLoggedIn = true;
+                        break;
+                    }
+                }
+                if (isLoggedIn) {
                     JOptionPane.showMessageDialog(null, "Login successful");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Login failed");
+                    JOptionPane.showMessageDialog(null, "Invalid credentials");
                 }
             }
         });
         panel.add(loginButton);
-    }
-
-    private boolean login(String username, int portNumber) {
-        return true;
     }
 }

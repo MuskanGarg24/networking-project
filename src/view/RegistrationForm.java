@@ -97,4 +97,9 @@ public class RegistrationForm extends JFrame {
         });
         panel.add(registerButton);
     }
+
+    // Getter for the ArrayList of Peer objects
+    public ArrayList<Peer> getPeers() {
+        return peers;
+    }
 }
