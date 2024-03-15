@@ -6,14 +6,21 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 public class RegistrationForm extends JFrame {
-    private JTextField usernameField;
-    private JTextField ipAddressField;
-    private JTextField portNumberField;
+    private JTextField[] usernameFields;
+    private JTextField[] ipAddressFields;
+    private JTextField[] portNumberFields;
+    private JTextField[] fileFields;
+    private int numberOfNodes;
+    public ArrayList<Peer> peers;
 
     public RegistrationForm() {
         setTitle("Registration Form");
-        setSize(300, 200);
+        setSize(400, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        // Take input for the number of nodes
+        numberOfNodes = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of nodes: "));
+        peers = new ArrayList<>(numberOfNodes);
 
         JPanel panel = new JPanel();
         add(panel);
@@ -24,43 +31,67 @@ public class RegistrationForm extends JFrame {
     private void placeComponents(JPanel panel) {
         panel.setLayout(null);
 
-        JLabel usernameLabel = new JLabel("Username");
-        usernameLabel.setBounds(10, 20, 80, 25);
-        panel.add(usernameLabel);
+        usernameFields = new JTextField[numberOfNodes];
+        ipAddressFields = new JTextField[numberOfNodes];
+        portNumberFields = new JTextField[numberOfNodes];
+        fileFields = new JTextField[numberOfNodes];
 
-        usernameField = new JTextField(20);
-        usernameField.setBounds(100, 20, 165, 25);
-        panel.add(usernameField);
+        // Dynamically create input fields for each node
+        for (int i = 0; i < numberOfNodes; i++) {
+            JLabel usernameLabel = new JLabel("Username for Node " + (i + 1));
+            usernameLabel.setBounds(10, 20 + i * 100, 120, 25);
+            panel.add(usernameLabel);
 
-        JLabel ipAddressLabel = new JLabel("IP Address");
-        ipAddressLabel.setBounds(10, 50, 80, 25);
-        panel.add(ipAddressLabel);
+            usernameFields[i] = new JTextField(20);
+            usernameFields[i].setBounds(140, 20 + i * 100, 165, 25);
+            panel.add(usernameFields[i]);
 
-        ipAddressField = new JTextField(20);
-        ipAddressField.setBounds(100, 50, 165, 25);
-        panel.add(ipAddressField);
+            JLabel ipAddressLabel = new JLabel("IP Address for Node " + (i + 1));
+            ipAddressLabel.setBounds(10, 50 + i * 100, 120, 25);
+            panel.add(ipAddressLabel);
 
-        JLabel portNumberLabel = new JLabel("Port Number");
-        portNumberLabel.setBounds(10, 80, 80, 25);
-        panel.add(portNumberLabel);
+            ipAddressFields[i] = new JTextField(20);
+            ipAddressFields[i].setBounds(140, 50 + i * 100, 165, 25);
+            panel.add(ipAddressFields[i]);
 
-        portNumberField = new JTextField(20);
-        portNumberField.setBounds(100, 80, 165, 25);
-        panel.add(portNumberField);
+            JLabel portNumberLabel = new JLabel("Port Number for Node " + (i + 1));
+            portNumberLabel.setBounds(10, 80 + i * 100, 120, 25);
+            panel.add(portNumberLabel);
+
+            portNumberFields[i] = new JTextField(20);
+            portNumberFields[i].setBounds(140, 80 + i * 100, 165, 25);
+            panel.add(portNumberFields[i]);
+
+            JLabel fileLabel = new JLabel("File for Node " + (i + 1));
+            fileLabel.setBounds(10, 110 + i * 100, 120, 25);
+            panel.add(fileLabel);
+
+            fileFields[i] = new JTextField(20);
+            fileFields[i].setBounds(140, 110 + i * 100, 165, 25);
+            panel.add(fileFields[i]);
+        }
 
         JButton registerButton = new JButton("Register");
-        registerButton.setBounds(10, 110, 80, 25);
+        registerButton.setBounds(10, 140 + (numberOfNodes - 1) * 100, 100, 25);
         registerButton.addActionListener(new ActionListener() {
-            ArrayList<Peer> peers = new ArrayList<>();
-
             public void actionPerformed(ActionEvent e) {
-                String username = usernameField.getText();
-                String ipAddress = ipAddressField.getText();
-                int portNumber = Integer.parseInt(portNumberField.getText());
+                System.out.println("Register button clicked");
+                // Iterate through input fields for each node and create Peer objects
+                for (int i = 0; i < numberOfNodes; i++) {
+                    String username = usernameFields[i].getText();
+                    String ipAddress = ipAddressFields[i].getText();
+                    int portNumber = Integer.parseInt(portNumberFields[i].getText());
+                    String file = fileFields[i].getText();
 
-                // Create a new Peer object
-                Peer peer = new Peer(username, ipAddress, portNumber);
-                peers.add(peer);
+                    // Create a new Peer object for each node
+                    Peer peer = new Peer(username, ipAddress, portNumber, file);
+                    peers.add(peer);
+                }
+
+                // Output the ArrayList of Peer objects
+                for (Peer peer : peers) {
+                    System.out.println(peer);
+                }
                 dispose();
             }
         });
