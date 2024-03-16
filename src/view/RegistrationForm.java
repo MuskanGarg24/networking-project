@@ -75,7 +75,6 @@ public class RegistrationForm extends JFrame {
         registerButton.setBounds(10, 140 + (numberOfNodes - 1) * 100, 100, 25);
         registerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Register button clicked");
                 // Iterate through input fields for each node and create Peer objects
                 for (int i = 0; i < numberOfNodes; i++) {
                     String username = usernameFields[i].getText();
@@ -89,9 +88,17 @@ public class RegistrationForm extends JFrame {
                 }
 
                 // Output the ArrayList of Peer objects
+                System.out.println("Peers registered:");
                 for (Peer peer : peers) {
                     System.out.println(peer);
                 }
+
+                // Generate and print random graph
+                RandomGraphGenerator randomGraphGenerator = new RandomGraphGenerator(numberOfNodes);
+                randomGraphGenerator.generateRandomGraph();
+                randomGraphGenerator.printGraph();
+
+                // Close the registration form
                 dispose();
             }
         });

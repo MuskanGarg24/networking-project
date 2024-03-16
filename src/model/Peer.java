@@ -51,9 +51,9 @@ public class Peer {
 
     @Override
     public String toString() {
-        return "Username: " + this.getUsername() + "\n" +
-                "IP Address: " + this.getIpAddress() + "\n" +
-                "Port Number: " + this.getPortNumber() + "\n" +
+        return "Username: " + this.getUsername() + " " +
+                "IP Address: " + this.getIpAddress() + " " +
+                "Port Number: " + this.getPortNumber() + " " +
                 "File: " + this.getFile();
     }
 }
