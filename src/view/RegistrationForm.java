@@ -1,18 +1,24 @@
 package src.view;
 
-import javax.swing.*;
 import src.model.Peer;
+import src.controller.PeerController;
+
+import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
 public class RegistrationForm extends JFrame {
+
+    // Instance variables for the input fields and the list of peers
     private JTextField[] usernameFields;
     private JTextField[] ipAddressFields;
     private JTextField[] portNumberFields;
     private JTextField[] fileFields;
     private int numberOfNodes;
-    public ArrayList<Peer> peers;
+    private ArrayList<Peer> peers;
+    private PeerController peerController;
 
+    // Constructor to initialize the registration form
     public RegistrationForm() {
         setTitle("Registration Form");
         setSize(400, 300);
@@ -28,6 +34,12 @@ public class RegistrationForm extends JFrame {
         setVisible(true);
     }
 
+    // Method to set the PeerController
+    public void setPeerController(PeerController peerController) {
+        this.peerController = peerController;
+    }
+
+    // Method to place the components in the registration form
     private void placeComponents(JPanel panel) {
         panel.setLayout(null);
 
@@ -73,6 +85,8 @@ public class RegistrationForm extends JFrame {
 
         JButton registerButton = new JButton("Register");
         registerButton.setBounds(10, 140 + (numberOfNodes - 1) * 100, 100, 25);
+
+        // Add an action listener to the register button
         registerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Iterate through input fields for each node and create Peer objects
@@ -81,7 +95,6 @@ public class RegistrationForm extends JFrame {
                     String ipAddress = ipAddressFields[i].getText();
                     int portNumber = Integer.parseInt(portNumberFields[i].getText());
                     String file = fileFields[i].getText();
-
                     // Create a new Peer object for each node
                     Peer peer = new Peer(username, ipAddress, portNumber, file);
                     peers.add(peer);
@@ -98,8 +111,8 @@ public class RegistrationForm extends JFrame {
                 randomGraphGenerator.generateRandomGraph();
                 randomGraphGenerator.printGraph();
 
-                // Close the registration form
-                dispose();
+                // Show the login form
+                peerController.showLoginScreen();
             }
         });
         panel.add(registerButton);
